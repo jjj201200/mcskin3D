@@ -10,6 +10,7 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
             this.tween = {};
             this.nextPose = undefined;
         };
+
         init(model) {
             this.model = model;
             this.updateCurrentState().updateTargetState();
@@ -36,7 +37,9 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
                 }
             };
 
-            let onStart = () => { p.model.currentPose = p.name; };
+            let onStart = () => {
+                p.model.currentPose = p.name;
+            };
             this.tween = new TWEEN.Tween(this.currentTweenData)
                 .to(this.targetTweenData, this.duration)
                 .easing(TWEEN.Easing.Linear.None)
@@ -49,6 +52,7 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
         setNextPose(nextPose) {
             this.nextPose = nextPose;
         }
+
         do(chain) {
             this.updateCurrentState();
             this.model.mesh.currentPose = this.name;
@@ -57,13 +61,15 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
             function onComplete() {
                 if (chain && p.nextPose) p.nextPose.do(chain);
             }
+
             this.tween.start().onComplete(onComplete);
             return this;
         };
+
         updateCurrentState() {
             for (let componentIndex in this.model.mesh.children) {
                 let component = this.model.mesh.children[componentIndex];
-                let componentName = component.name;
+                let componentName = component.component.name;
                 this.currentTweenData[componentName + '_translateX'] = component.position.x;
                 this.currentTweenData[componentName + '_translateY'] = component.position.y;
                 this.currentTweenData[componentName + '_translateZ'] = component.position.z;
@@ -77,6 +83,7 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
             }
             return this;
         };
+
         updateTargetState() {
             for (let componentName in this.posesData) {
                 let component = this.posesData[componentName];

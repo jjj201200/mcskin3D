@@ -4,7 +4,7 @@ define('Component', [
     'TWEEN',
     'jquery',
     'Cube'
-], function(THREE, TWEEN, $, Cube) {
+], function (THREE, TWEEN, $, Cube) {
     class Component {
         constructor(options) {
             this.skin = undefined;
@@ -79,18 +79,22 @@ define('Component', [
 
             return this;
         };
+
         setSkinLayers(skinLayers) {
             this.skinLayers = skinLayers;
             return this;
         };
+
         drawSkin() {
             this.update();
             return this;
         };
+
         reloadOriginalSkin() {
             this.update(true);
             return this;
         };
+
         focuse(opacity) {
             let _this = this;
             let data = Object.keys(this.data.map[this.typeIndex] || this.data.map[0]);
@@ -101,34 +105,53 @@ define('Component', [
                 // console.log(name,_this.cubes[name].opacity != toOpacity)
                 // console.log(name,_this.cubes[name].opacity , toOpacity)
                 if (_this.cubes[data[0]].opacity != toOpacity) {
-                    opacityObject = { opacity: _this.cubes[data[0]].opacity };
+                    opacityObject = {opacity: _this.cubes[data[0]].opacity};
 
                     var tween = new TWEEN.Tween(opacityObject).to({
                         opacity: toOpacity
                     }, 300).easing(
                         TWEEN.Easing.Quadratic.InOut
-                    ).onStart(function() {
+                    ).onStart(function () {
                         _this.focusing = true;
                         _this.model.animating = true;
-                    }).onUpdate(function() {
+                        _this.mesh.visible = true;
+                        for (let index in data) {
+                            _this.cubes[data[index]].mesh.visible = true;
+                        }
+                    }).onUpdate(function () {
                         for (let index in data) {
                             _this.cubes[data[index]].setOpacity(this.opacity);
                         }
-                    }).onComplete(function() {
+                    }).onComplete(function () {
                         _this.focusing = false;
                         _this.model.animating = false;
+                        if (toOpacity==0) {
+                            _this.mesh.visible = false;
+                            for (let index in data) {
+                                _this.cubes[data[index]].mesh.visible = false;
+                            }
+                        }
                     }).start();
+                } else {
+                    if (toOpacity==1) {
+                        _this.mesh.visible = true;
+                        for (let index in data) {
+                            _this.cubes[data[index]].mesh.visible = true;
+                        }
+                    }
                 }
-
             }
             return this;
         };
+
         unFocuse() {
-            return this.focuse(0.05);
+            return this.focuse(0);
         }
-        resetFocuse(){
+
+        resetFocuse() {
             return this.focuse(1);
         }
-    };
+    }
+    ;
     return Component;
 });

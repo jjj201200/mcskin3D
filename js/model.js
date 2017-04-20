@@ -1,5 +1,5 @@
 //model.js
-define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function(THREE, Component, Pose, Animation) {
+define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function (THREE, Component, Pose, Animation) {
     class Model {
         constructor(options, callback) {
             this.skin = new Image();
@@ -30,6 +30,7 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function(THREE, Com
             Object.assign(this, options);
             this.init();
         };
+
         init() {
             let _this = this;
             if (this.typeMap === undefined || this.versionMap === undefined) {
@@ -42,8 +43,8 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function(THREE, Com
             if (this.versionIndex !== undefined) this.version = this.versionMap[this.versionIndex] || 0;
             else console.warn('No Model Version!');
             this.mesh.name = this.name;
-            this.skin.onload = function() {
-                _this.update().initPoses().initAnimations()
+            this.skin.onload = function () {
+                _this.update().initPoses().initAnimations();
             };
             if (this.callback instanceof Function) this.callback(this);
             return this;
@@ -69,9 +70,10 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function(THREE, Com
                     this.POSES[poseName] = new Pose(this.poses[poseIndex]).init(this);
                 }
             }
-            this.doPose('walk');
+            // this.doPose('walk');
             return this;
         };
+
         initAnimations() {
             if (this.animations !== undefined) {
                 for (let animationIndex in this.animations) {
@@ -79,68 +81,75 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function(THREE, Com
                     this.ANIMATIONS[animationName] = new Animation(this.animations[animationIndex], this.POSES).init();
                 }
             }
-            // this.doAnimation('walk');
+            this.doAnimation('walk');
             return this;
         }
+
         doPose(poseName) {
             this.POSES[poseName] && this.POSES[poseName].do(false);
             return this;
         };
+
         doAnimation(animateName) {
-            console.log(this.ANIMATIONS[animateName])
-            this.ANIMATIONS[animateName] && this.ANIMATIONS[animateName].do();
+            this.ANIMATIONS[animateName] !== undefined && this.ANIMATIONS[animateName].do();
             return this;
         };
+
         update(original) {
             let _this = this;
             let length = Object.keys(this.components).length;
             if (length == 0) {
-                for (let componentIndex in this.data) {
+                for (let componentName in this.data) {
                     let component = new Component({
-                        name: componentIndex + ' ' + 'component',
-                        componentName: componentIndex,
+                        name: componentName,
                         skin: _this.skin,
-                        data: _this.data[componentIndex],
+                        data: _this.data[componentName],
                         typeIndex: _this.typeIndex,
                         version: _this.version,
-                        position: _this.data[componentIndex].position,
-                        center: _this.data[componentIndex].center,
+                        position: _this.data[componentName].position,
+                        center: _this.data[componentName].center,
                         model: _this
                     });
                     this.mesh.add(component.mesh);
-                    this.components[componentIndex] = component;
+                    this.components[componentName] = component;
                 }
                 this.mesh.position.set(0, 0, 0);
             } else {
-                for (let componentIndex in this.data) {
-                    this.components[componentIndex].setSkinLayers(this.skinLayers);
-                    original ? this.components[componentIndex].reloadOriginalSkin() : this.components[componentIndex].drawSkin();
+                for (let componentName in this.data) {
+                    this.components[componentName].setSkinLayers(this.skinLayers);
+                    original ? this.components[componentName].reloadOriginalSkin() : this.components[componentName].drawSkin();
                 }
             }
 
             return this;
         };
+
         reloadOriginalSkin() {
             this.update(true);
             return this;
         };
+
         addSkin(skinImg) {
             if (skinImg.complete) this.skinLayers.push(skinImg);
             this.update();
             return this;
         };
+
         focuseComponent(componentName) {
             // if (this.animating == false)
-                for (let componentIndex in this.data) {
-                    if (componentIndex == componentName) this.components[componentIndex].focuse();
-                    else this.components[componentIndex].unFocuse();
-                }
+            for (let componentIndex in this.data) {
+                if (componentIndex == componentName){
+                    this.components[componentIndex].focuse();
+                }else this.components[componentIndex].unFocuse();
+            }
         }
+
         resetFocuse() {
             // if (this.animating == false)
-                for (let componentIndex in this.data) this.components[componentIndex].resetFocuse();
+            for (let componentIndex in this.data) this.components[componentIndex].resetFocuse();
         }
-    };
+    }
+    ;
 
     return Model;
 });

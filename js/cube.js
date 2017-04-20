@@ -1,4 +1,4 @@
-define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) {
+define('Cube', ['THREE', 'Face', 'Materials'], function (THREE, Face, materials) {
     class Cube {
         constructor(options) {
             this.skin = new Image();
@@ -32,6 +32,7 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
             this.initCanvas().initFACES().initMesh().reloadOriginalSkin().drew();
             return this;
         };
+
         initFACES() {
             let x = this.textureSize.x;
             let y = this.textureSize.y;
@@ -48,6 +49,7 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
             ];
             return this;
         };
+
         initCanvas() {
             this.canvas = document.createElement('canvas');
             this.canvas.width = this.skin.width;
@@ -56,6 +58,7 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
 
             return this;
         };
+
         initMesh() {
             this.geometry = new THREE.BoxGeometry(this.boxSize.x, this.boxSize.y, this.boxSize.z, this.textureSize.x, this.textureSize.y, this.textureSize.z);
             this.geometry.name = this.name + ' geometry';
@@ -74,7 +77,7 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
                 transparent: true,
                 opacity: 0
             });
-            this.material = new THREE.MeshFaceMaterial([a, b]);
+            this.material = new THREE.MultiMaterial([a, b]);
             this.material.materials[0].opacity = this.opacity;
             this.mesh = new THREE.Mesh(this.geometry, this.material);
             this.mesh.name = this.name + ' cube_in';
@@ -88,17 +91,19 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
             this.mesh.name = this.name + ' cube';
             return this;
         };
+
         findComponent(parent) {
             var mesh = parent || this.mesh.parent;
-            if (mesh && mesh.name != '') {
-                var res = mesh.name.match('component$');
-                if (res !== null) {
-                    return mesh;
+            if (mesh !== undefined) {
+                // var res = mesh.name.match('component$');
+                if (mesh.component !== undefined && mesh.component.name !== undefined) {
+                    return mesh.component;
                 } else {
                     return this.findComponent(mesh.parent);
                 }
             }
         };
+
         drew() {
             for (let faceIndex = 0; faceIndex < this.geometry.faces.length; faceIndex += 2) {
                 //left right top bottom front back
@@ -123,10 +128,12 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
             this.geometry.elementsNeedUpdate = true;
             return this;
         };
+
         clearCanvas() {
             this.context.clearRect(0, 0, this.skin.width, this.skin.height);
             return this;
         };
+
         drawSkin(original) {
             this.clearCanvas();
             this.showOriginalSkin = original;
@@ -140,21 +147,25 @@ define('Cube', ['THREE', 'Face', 'Materials'], function(THREE, Face, materials) 
             this.drew();
             return this;
         };
+
         reloadOriginalSkin() {
             this.showOriginalSkin = true;
             this.drawSkin(this.showOriginalSkin);
             return this;
         };
+
         setSkinLayers(skinLayers) {
             this.skinLayers = skinLayers;
             return this;
         };
+
         setOpacity(opacity) {
             this.opacity = opacity;
             this.material.materials[0].opacity = opacity;
             // this.drawSkin(this.showOriginalSkin);
             return this;
         }
-    };
+    }
+    ;
     return Cube;
 });
