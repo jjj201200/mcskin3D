@@ -148,8 +148,7 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function (THREE, Co
             // if (this.animating == false)
             for (let componentIndex in this.data) this.components[componentIndex].resetFocuse();
         }
-    }
-    ;
+    };
 
     return Model;
 });

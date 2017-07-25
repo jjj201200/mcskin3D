@@ -52,7 +52,7 @@ define('SceneRenderer', [
 
             this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
             this.camera.animation = {};
-            this.camera.animation.speed = 250;
+            this.camera.animation.speed = 300;
             this.camera.animation.moved = false;
             this.camera.animation.positionMoved = false;
             this.camera.animation.targetMoved = false;
@@ -77,7 +77,9 @@ define('SceneRenderer', [
             this.controls.userPanSpeed = 0;
             this.controls.enablePan = false;
             this.controls.maxDistance = _editor.editorSize * _editor.scale * _editor.scale;
-            this.controls.minDistance = 25;
+            this.controls.minDistance = 45;
+            this.controls.minZoom = 0.8;
+            this.controls.maxZoom = 1.2;
             this.controls.mouseButtons.PAN = 1;
             this.controls.mouseButtons.ZOOM = 2;
             this.controls.mouseButtons.ORBIT = 2;
@@ -92,13 +94,13 @@ define('SceneRenderer', [
             });
             this.clickTime = new Date().getTime();
             this.clickTimeout = undefined;
-            this.dblclickDeltaTime = 250; //ms
+            this.dblclickDeltaTime = 300; //ms
             this.domElement.on('mousemove', function (e) {
                 e.preventDefault();
                 _editor.mouse.x = (e.clientX / _this.domElement.innerWidth()) * 2 - 1;
                 _editor.mouse.y = -(e.clientY / _this.domElement.innerHeight()) * 2 + 1;
 
-            }).on('click', function (e) {
+            }).on('mousedown', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 let nowClickTime = new Date().getTime();
@@ -106,20 +108,18 @@ define('SceneRenderer', [
                     //focuse to component
                     _editor.raycaster.setFromCamera(_editor.mouse, _this.camera);
                     let intersects = _editor.raycaster.intersectObjects(_this.editor.objects);
+                    let target = intersects[0].object.cube.findComponent();
                     _this.clickTimeout = setTimeout(function () { //click
                         if (e.button === 0) {
                             // console.log('click');
                             clearTimeout(_this.clickTimeout);
                             _this.clickTimeout = undefined;
-
-
                             if (intersects.length > 0) {
-                                let target = intersects[0].object.cube.findComponent();
                                 // _this.renderer.sortObjects = false;
                                 _this.model.focuseComponent(target.name);
                                 _this.cameraAnimation({
                                     target: target.position,
-                                    zoom: 2,
+                                    zoom: 1.5,
                                     controls: true
                                 });
                             }
@@ -248,7 +248,7 @@ define('SceneRenderer', [
             this.camera.lookAt(this.model.focuseTarget);
         };
 
-        addChild(children) {
+        addChild(children) {// add components to editor
             for (let childIndex in children) {
                 let child = children[childIndex];
                 if (child.children.length > 0) this.addChild(child.children);

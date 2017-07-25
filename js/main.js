@@ -76,6 +76,6 @@ require(['domReady', 'jquery', 'THREE', 'SkinCraft'], function (domReady, $, THR
             canvasHeight:$(document).height()
         });
         skinCraft.addSkin('./第一层头发.png');
-        skinCraft.addSkin('./第二层头发.png');
+        // skinCraft.addSkin('./第二层头发.png');
     });
 });
