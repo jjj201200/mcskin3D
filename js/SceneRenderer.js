@@ -77,9 +77,9 @@ define('SceneRenderer', [
             this.controls.userPanSpeed = 0;
             this.controls.enablePan = false;
             this.controls.maxDistance = _editor.editorSize * _editor.scale * _editor.scale;
-            this.controls.minDistance = 45;
+            this.controls.minDistance = 15;
             this.controls.minZoom = 0.8;
-            this.controls.maxZoom = 1.2;
+            this.controls.maxZoom = 1.5;
             this.controls.mouseButtons.PAN = 1;
             this.controls.mouseButtons.ZOOM = 2;
             this.controls.mouseButtons.ORBIT = 2;
@@ -105,10 +105,11 @@ define('SceneRenderer', [
                 e.stopPropagation();
                 let nowClickTime = new Date().getTime();
                 if (_this.clickTimeout === undefined) {
-                    //focuse to component
+                    //focuse to part
                     _editor.raycaster.setFromCamera(_editor.mouse, _this.camera);
                     let intersects = _editor.raycaster.intersectObjects(_this.editor.objects);
-                    let target = intersects[0].object.cube.findComponent();
+                    console.log(intersects[0]);
+                    let target = intersects[0].object.cube.findPart();
                     _this.clickTimeout = setTimeout(function () { //click
                         if (e.button === 0) {
                             // console.log('click');
@@ -116,10 +117,10 @@ define('SceneRenderer', [
                             _this.clickTimeout = undefined;
                             if (intersects.length > 0) {
                                 // _this.renderer.sortObjects = false;
-                                _this.model.focuseComponent(target.name);
+                                _this.model.focusePart(target.name);
                                 _this.cameraAnimation({
                                     target: target.position,
-                                    zoom: 1.5,
+                                    zoom: _this.controls.maxZoom,
                                     controls: true
                                 });
                             }
@@ -248,7 +249,7 @@ define('SceneRenderer', [
             this.camera.lookAt(this.model.focuseTarget);
         };
 
-        addChild(children) {// add components to editor
+        addChild(children) {// add parts to editor
             for (let childIndex in children) {
                 let child = children[childIndex];
                 if (child.children.length > 0) this.addChild(child.children);

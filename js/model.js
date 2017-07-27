@@ -1,12 +1,12 @@
 //model.js
-define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function (THREE, Component, Pose, Animation) {
-    class Model {
+define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, Pose, Animation) {
+    return class Model {
         constructor(options, callback) {
             this.skin = new Image();
             this.skinLayers = [];
             this.canvas;
             this.context;
-            this.components = {};
+            this.parts = {};
             this.mesh = new THREE.Mesh();
             this.data = {};
             this.name = '';
@@ -52,8 +52,8 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function (THREE, Co
 
         initPoses() {
             let defaultPoseData = {};
-            for (let componentName in this.components) {
-                defaultPoseData[componentName] = {
+            for (let partName in this.parts) {
+                defaultPoseData[partName] = {
                     translate: new THREE.Vector3(0, 0, 0),
                     rotate: new THREE.Vector3(0, 0, 0),
                     scale: new THREE.Vector3(0, 0, 0)
@@ -97,27 +97,27 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function (THREE, Co
 
         update(original) {
             let _this = this;
-            let length = Object.keys(this.components).length;
+            let length = Object.keys(this.parts).length;
             if (length == 0) {
-                for (let componentName in this.data) {
-                    let component = new Component({
-                        name: componentName,
+                for (let partName in this.data) {
+                    let part = new Part({
+                        name: partName,
                         skin: _this.skin,
-                        data: _this.data[componentName],
+                        data: _this.data[partName],
                         typeIndex: _this.typeIndex,
                         version: _this.version,
-                        position: _this.data[componentName].position,
-                        center: _this.data[componentName].center,
+                        position: _this.data[partName].position,
+                        center: _this.data[partName].center,
                         model: _this
                     });
-                    this.mesh.add(component.mesh);
-                    this.components[componentName] = component;
+                    this.mesh.add(part.mesh);
+                    this.parts[partName] = part;
                 }
                 this.mesh.position.set(0, 0, 0);
             } else {
-                for (let componentName in this.data) {
-                    this.components[componentName].setSkinLayers(this.skinLayers);
-                    original ? this.components[componentName].reloadOriginalSkin() : this.components[componentName].drawSkin();
+                for (let partName in this.data) {
+                    this.parts[partName].setSkinLayers(this.skinLayers);
+                    original ? this.parts[partName].reloadOriginalSkin() : this.parts[partName].drawSkin();
                 }
             }
 
@@ -135,20 +135,18 @@ define('Model', ['THREE', 'Component', 'Pose', 'Animation'], function (THREE, Co
             return this;
         };
 
-        focuseComponent(componentName) {
+        focusePart(partName) {
             // if (this.animating == false)
-            for (let componentIndex in this.data) {
-                if (componentIndex == componentName){
-                    this.components[componentIndex].focuse();
-                }else this.components[componentIndex].unFocuse();
+            for (let partIndex in this.data) {
+                if (partIndex == partName){
+                    this.parts[partIndex].focuse();
+                }else this.parts[partIndex].unFocuse();
             }
         }
 
         resetFocuse() {
             // if (this.animating == false)
-            for (let componentIndex in this.data) this.components[componentIndex].resetFocuse();
+            for (let partIndex in this.data) this.parts[partIndex].resetFocuse();
         }
-    };
-
-    return Model;
+    }
 });

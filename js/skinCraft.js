@@ -3,9 +3,12 @@ define('SkinCraft', [
     'THREE', 
      'jquery', 
      'Model', 
-     'Steve',
-     'SceneRenderer'
-     ], function (require, THREE, $, Model, Steve,SceneRenderer) {
+     'SceneRenderer',
+     'Common',
+     'item.Skin',
+     'item.Component',
+     'Queue',
+     ], function (require, THREE, $, Model, SceneRenderer, Common, Skin, Component, Queue) {
     window.requestAnimFrame = (function () {
         return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -25,10 +28,10 @@ define('SkinCraft', [
         };
         this.init = function (options) {
             Object.assign(this, this.options, options);
-
+            
             if (this.domElement) {
-                    this.initSceneEditor();
-                    this.loadModel();
+                this.initSceneEditor();
+                this.loadModel(this.modelName);
             }
             return this;
         };
@@ -45,22 +48,22 @@ define('SkinCraft', [
             this.skinImg = new Image;
             this.skinImg.src = url;
             this.skinImg.onload = function () {
-                _this.model.addSkin(this);
+
+                // _this.model.addSkin(this);
             };
             this.skinImg.onerror = function () {};
             return this;
         };
-        this.loadModel = function () {
-            // var model = require(this.modelName);
-            // console.log(model instanceof Model)
-            // if (model!=undefined && model instanceof Model) {
-            this.model = Steve;
-            this.sceneRenderer.addModel(this.model);
-
-            // }else console.log('no model');
-            return this;
+        this.loadModel = function (modelName) {
+           require(['model.' + modelName],function(model){
+                if (model!=undefined && model instanceof Model) {
+                    _this.queue = new Queue(model);
+                    _this.model = model;
+                    _this.sceneRenderer.addModel(_this.model);
+                }else throw new Error('no model');
+                return _this;
+            });
         };
-
         this.init(options);
     }
 

@@ -92,14 +92,14 @@ define('Cube', ['THREE', 'Face', 'Materials'], function (THREE, Face, materials)
             return this;
         };
 
-        findComponent(parent) {
+        findPart(parent) {
             var mesh = parent || this.mesh.parent;
             if (mesh !== undefined) {
-                // var res = mesh.name.match('component$');
-                if (mesh.component !== undefined && mesh.component.name !== undefined) {
-                    return mesh.component;
+                // var res = mesh.name.match('part$');
+                if (mesh.part !== undefined && mesh.part.name !== undefined) {
+                    return mesh.part;
                 } else {
-                    return this.findComponent(mesh.parent);
+                    return this.findPart(mesh.parent);
                 }
             }
         };

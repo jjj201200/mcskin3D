@@ -17,12 +17,17 @@ require.config({
         'SkinCraft': './skinCraft',
         'SceneRenderer': './SceneRenderer',
         'GuiController': './GuiController',
-        'model': './model',
-        'pose': './pose',
-        'animation': './animation',
-        'component': './component',
-        'face': './face',
-        'Steve': './models/steve.model',
+        'Model': './model',
+        'Pose': './pose',
+        'Animation': './animation',
+        'Face': './face',
+        'model.Steve': './models/steve',
+        'Queue': './queue',
+        'Part': './part',
+        'Common': './common',
+        'Item': './item',
+        'item.Skin': './items/skin',
+        'item.Component': './items/component',
     },
     shim: {
         'THREE': {
@@ -56,10 +61,10 @@ require.config({
         'SkinCraft': {
             deps: ['require', 'THREE', 'jquery', 'TWEEN', 'stats', 'THREE.OrbitControls', 'Model','dat','ThreeBSP']
         },
-        'pose':{
+        'Pose':{
             deps:['THREE','TWEEN','jquery']
         },
-        'animation':{
+        'Animation':{
             deps:['Pose']
         },
         'dat':{

@@ -1,12 +1,14 @@
 //component
-define('Component', [
+define('item.Component', [
     'THREE',
     'TWEEN',
     'jquery',
-    'Cube'
-], function (THREE, TWEEN, $, Cube) {
-    class Component {
+    'Cube',
+    'Item'
+], function (THREE, TWEEN, $, Cube, Item) {
+    return class Component extends Item {
         constructor(options) {
+            super(options);
             this.skin = undefined;
             this.skinLayers = [];
             this.cubes = {};
@@ -152,6 +154,4 @@ define('Component', [
             return this.focuse(1);
         }
     }
-    ;
-    return Component;
 });

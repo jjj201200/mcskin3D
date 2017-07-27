@@ -1,5 +1,5 @@
 define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
-    class Pose {
+    return class Pose {
         constructor(options) {
             this.name = options.name;
             this.posesData = options.defination;
@@ -18,22 +18,22 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
             let p = this;
 
             function onUpdate() {
-                for (let componentIndex in p.model.mesh.children) {
-                    let componentName = p.model.mesh.children[componentIndex].name;
-                    let translateX = this[componentName + '_translateX'];
-                    let translateY = this[componentName + '_translateY'];
-                    let translateZ = this[componentName + '_translateZ'];
-                    let rotateX = this[componentName + '_rotateX'];
-                    let rotateY = this[componentName + '_rotateY'];
-                    let rotateZ = this[componentName + '_rotateZ'];
-                    let scaleX = this[componentName + '_scaleX'];
-                    let scaleY = this[componentName + '_scaleY'];
-                    let scaleZ = this[componentName + '_scaleZ'];
-                    p.model.mesh.children[componentIndex].position.set(translateX, translateY, translateZ);
-                    p.model.mesh.children[componentIndex].children[0].rotation.x = rotateX;
-                    p.model.mesh.children[componentIndex].children[0].rotation.y = rotateY;
-                    p.model.mesh.children[componentIndex].children[0].rotation.z = rotateZ;
-                    p.model.mesh.children[componentIndex].scale.set(scaleX, scaleY, scaleZ);
+                for (let partIndex in p.model.mesh.children) {
+                    let partName = p.model.mesh.children[partIndex].name;
+                    let translateX = this[partName + '_translateX'];
+                    let translateY = this[partName + '_translateY'];
+                    let translateZ = this[partName + '_translateZ'];
+                    let rotateX = this[partName + '_rotateX'];
+                    let rotateY = this[partName + '_rotateY'];
+                    let rotateZ = this[partName + '_rotateZ'];
+                    let scaleX = this[partName + '_scaleX'];
+                    let scaleY = this[partName + '_scaleY'];
+                    let scaleZ = this[partName + '_scaleZ'];
+                    p.model.mesh.children[partIndex].position.set(translateX, translateY, translateZ);
+                    p.model.mesh.children[partIndex].children[0].rotation.x = rotateX;
+                    p.model.mesh.children[partIndex].children[0].rotation.y = rotateY;
+                    p.model.mesh.children[partIndex].children[0].rotation.z = rotateZ;
+                    p.model.mesh.children[partIndex].scale.set(scaleX, scaleY, scaleZ);
                 }
             };
 
@@ -67,46 +67,45 @@ define('Pose', ['THREE', 'TWEEN'], function (THREE, TWEEN) {
         };
 
         updateCurrentState() {
-            for (let componentIndex in this.model.mesh.children) {
-                let component = this.model.mesh.children[componentIndex];
-                let componentName = component.component.name;
-                this.currentTweenData[componentName + '_translateX'] = component.position.x;
-                this.currentTweenData[componentName + '_translateY'] = component.position.y;
-                this.currentTweenData[componentName + '_translateZ'] = component.position.z;
-                // componentName=='leftArm'&& console.log(component.children[0].rotation.x)
-                this.currentTweenData[componentName + '_rotateX'] = component.children[0].rotation.x;
-                this.currentTweenData[componentName + '_rotateY'] = component.children[0].rotation.y;
-                this.currentTweenData[componentName + '_rotateZ'] = component.children[0].rotation.z;
-                this.currentTweenData[componentName + '_scaleX'] = component.scale.x;
-                this.currentTweenData[componentName + '_scaleY'] = component.scale.y;
-                this.currentTweenData[componentName + '_scaleZ'] = component.scale.z;
+            for (let partIndex in this.model.mesh.children) {
+                let part = this.model.mesh.children[partIndex];
+                let partName = part.part.name;
+                this.currentTweenData[partName + '_translateX'] = part.position.x;
+                this.currentTweenData[partName + '_translateY'] = part.position.y;
+                this.currentTweenData[partName + '_translateZ'] = part.position.z;
+                // partName=='leftArm'&& console.log(part.children[0].rotation.x)
+                this.currentTweenData[partName + '_rotateX'] = part.children[0].rotation.x;
+                this.currentTweenData[partName + '_rotateY'] = part.children[0].rotation.y;
+                this.currentTweenData[partName + '_rotateZ'] = part.children[0].rotation.z;
+                this.currentTweenData[partName + '_scaleX'] = part.scale.x;
+                this.currentTweenData[partName + '_scaleY'] = part.scale.y;
+                this.currentTweenData[partName + '_scaleZ'] = part.scale.z;
             }
             return this;
         };
 
         updateTargetState() {
-            for (let componentName in this.posesData) {
-                let component = this.posesData[componentName];
-                if (component.translate) {
-                    this.targetTweenData[componentName + '_translateX'] = component.translate.x || this.currentTweenData[componentName + '_translateX'];
-                    this.targetTweenData[componentName + '_translateY'] = component.translate.y || this.currentTweenData[componentName + '_translateY'];
-                    this.targetTweenData[componentName + '_translateZ'] = component.translate.z || this.currentTweenData[componentName + '_translateZ'];
+            for (let partName in this.posesData) {
+                let part = this.posesData[partName];
+                if (part.translate) {
+                    this.targetTweenData[partName + '_translateX'] = part.translate.x || this.currentTweenData[partName + '_translateX'];
+                    this.targetTweenData[partName + '_translateY'] = part.translate.y || this.currentTweenData[partName + '_translateY'];
+                    this.targetTweenData[partName + '_translateZ'] = part.translate.z || this.currentTweenData[partName + '_translateZ'];
                 }
-                if (component.rotate) {
-                    let euler = new THREE.Euler(THREE.Math.degToRad(component.rotate.x), THREE.Math.degToRad(component.rotate.y), THREE.Math.degToRad(component.rotate.z));
-                    this.targetTweenData[componentName + '_rotateX'] = euler.x || this.currentTweenData[componentName + '_rotateX'];
-                    this.targetTweenData[componentName + '_rotateY'] = euler.y || this.currentTweenData[componentName + '_rotateY'];
-                    this.targetTweenData[componentName + '_rotateZ'] = euler.z || this.currentTweenData[componentName + '_rotateZ'];
+                if (part.rotate) {
+                    let euler = new THREE.Euler(THREE.Math.degToRad(part.rotate.x), THREE.Math.degToRad(part.rotate.y), THREE.Math.degToRad(part.rotate.z));
+                    this.targetTweenData[partName + '_rotateX'] = euler.x || this.currentTweenData[partName + '_rotateX'];
+                    this.targetTweenData[partName + '_rotateY'] = euler.y || this.currentTweenData[partName + '_rotateY'];
+                    this.targetTweenData[partName + '_rotateZ'] = euler.z || this.currentTweenData[partName + '_rotateZ'];
                 }
-                if (component.scale) {
-                    this.targetTweenData[componentName + '_scaleX'] = component.scale.x || this.currentTweenData[componentName + '_scaleX'];
-                    this.targetTweenData[componentName + '_scaleY'] = component.scale.y || this.currentTweenData[componentName + '_scaleY'];
-                    this.targetTweenData[componentName + '_scaleZ'] = component.scale.z || this.currentTweenData[componentName + '_scaleZ'];
+                if (part.scale) {
+                    this.targetTweenData[partName + '_scaleX'] = part.scale.x || this.currentTweenData[partName + '_scaleX'];
+                    this.targetTweenData[partName + '_scaleY'] = part.scale.y || this.currentTweenData[partName + '_scaleY'];
+                    this.targetTweenData[partName + '_scaleZ'] = part.scale.z || this.currentTweenData[partName + '_scaleZ'];
                 }
 
             }
             return this;
         };
     }
-    return Pose;
 });
