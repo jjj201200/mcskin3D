@@ -110,8 +110,8 @@ define('SceneRenderer', [
                             clearTimeout(_this.clickTimeout);
                             _editor.raycaster.setFromCamera(_editor.mouse, _this.camera);
                             let intersects = _editor.raycaster.intersectObjects(_this.editor.objects);
-                            _this.clickTimeout = undefined;
                             if (intersects.length > 0) {
+                            _this.clickTimeout = undefined;
                                 let target = intersects[0].object.cube.findPart();
                                 // _this.renderer.sortObjects = false;
                                 _this.model.focusePart(target.name);
