@@ -44,7 +44,6 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
             else console.warn('No Model Version!');
             this.mesh.name = this.name;
             this.skin.onload = function () {
-                console.log('skin loaded')
                 _this.update().initPoses().initAnimations();
             };
             if (this.callback instanceof Function) this.callback(this);
@@ -109,6 +108,7 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
                         version: _this.version,
                         position: _this.partsData[partName].position,
                         center: _this.partsData[partName].center,
+                        rotation: _this.partsData[partName].rotation,
                         model: _this
                     });
                     this.mesh.add(part.mesh);

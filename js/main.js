@@ -74,7 +74,7 @@ require.config({
         }
     }
 });
-require(['domReady', 'jquery', 'THREE', 'SkinCraft'], function (domReady, $, THREE, SkinCraft) {
+require(['domReady', 'jquery', 'THREE', 'SkinCraft','model.Chicken','model.Steve'], function (domReady, $, THREE, SkinCraft) {
     domReady(function (document) {
         let skinCraft = new SkinCraft({
             domElement: $('#skin3D'),

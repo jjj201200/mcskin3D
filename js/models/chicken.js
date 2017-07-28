@@ -10,7 +10,7 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                 map:[{
                     basic:{
                         boxSize: new THREE.Vector3(4, 6, 3),
-                        textureSize: new THREE.Vector3(4, 6,3),
+                        textureSize: new THREE.Vector3(4, 6, 3),
                         texturePosition: {
                             original:new THREE.Vector2(3, 3)
                         },
@@ -42,7 +42,7 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                         boxSize: new THREE.Vector3(2, 2, 2),
                         textureSize: new THREE.Vector3(2, 2, 2),
                         texturePosition: {
-                            original:new THREE.Vector2(16, 4)
+                            original:new THREE.Vector2(16, 6)
                         },
                         visible: true,
                     }
@@ -63,7 +63,7 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                     }
                 }],
                 center: new THREE.Vector3(0,0,0),
-                position: new THREE.Vector3(-2,-6,0),
+                position: new THREE.Vector3(-2,-5,-1.5),
             },
             rightLeg:{
                 name:'rightLeg',
@@ -78,7 +78,7 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                     }
                 }],
                 center: new THREE.Vector3(0,0,0),
-                position: new THREE.Vector3(2,-6,0),
+                position: new THREE.Vector3(2,-5,-1.5),
             },
             body:{
                 name:'body',
@@ -92,8 +92,9 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                         visible: true,
                     }
                 }],
+                rotation: new THREE.Vector3(1.57,0,0),
                 center: new THREE.Vector3(0,0,0),
-                position: new THREE.Vector3(0,-1,-2),
+                position: new THREE.Vector3(0,0,-3),
             },
             leftWing:{
                 name:'leftWing',
@@ -108,7 +109,7 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                     }
                 }],
                 center: new THREE.Vector3(0,0,0),
-                position: new THREE.Vector3(3,0,-2),
+                position: new THREE.Vector3(3.5,1,-3),
             },
             rightWing:{
                 name:'leftWing',
@@ -123,7 +124,7 @@ define('model.Chicken',['THREE', 'Model', 'Pose', 'Animation'], (THREE, Model)=>
                     }
                 }],
                 center: new THREE.Vector3(0,0,0),
-                position: new THREE.Vector3(-3,0,-2),
+                position: new THREE.Vector3(-3.5,1,-3),
             },
         },
         skin: (function () {

@@ -21,7 +21,7 @@ define('SkinCraft', [
     function SkinCraft(options) {
         let _this = this;
         this.options = {
-            modelName: 'Chicken',
+            modelName: 'Steve',
             model: undefined,
             skinImg: undefined,
             domElement: undefined,
@@ -54,9 +54,10 @@ define('SkinCraft', [
             return this;
         };
         this.loadModel = function (modelName) {
+        //         let model = Chicken;
            require(['model.' + modelName],function(model){
                 if (model!=undefined && model instanceof Model) {
-                    _this.queue = new Queue(model);
+                    // _this.queue = new Queue(model);
                     _this.model = model;
                     _this.sceneRenderer.addModel(_this.model);
                 }else throw new Error('no model');
