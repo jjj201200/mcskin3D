@@ -109,13 +109,14 @@ define('SceneRenderer', [
                     _editor.raycaster.setFromCamera(_editor.mouse, _this.camera);
                     let intersects = _editor.raycaster.intersectObjects(_this.editor.objects);
                     console.log(intersects[0]);
-                    let target = intersects[0].object.cube.findPart();
-                    _this.clickTimeout = setTimeout(function () { //click
-                        if (e.button === 0) {
-                            // console.log('click');
-                            clearTimeout(_this.clickTimeout);
-                            _this.clickTimeout = undefined;
-                            if (intersects.length > 0) {
+                    if (intersects.length > 0) {
+                        let target = intersects[0].object.cube.findPart();
+                        _this.clickTimeout = setTimeout(function () { //click
+                            if (e.button === 0) {
+                                // console.log('click');
+                                clearTimeout(_this.clickTimeout);
+                                _this.clickTimeout = undefined;
+                                // if (intersects.length > 0) {
                                 // _this.renderer.sortObjects = false;
                                 _this.model.focusePart(target.name);
                                 _this.cameraAnimation({
@@ -123,10 +124,10 @@ define('SceneRenderer', [
                                     zoom: _this.controls.maxZoom,
                                     controls: true
                                 });
+                                // }
                             }
-                        }
-
-                    }, _this.dblclickDeltaTime);
+                        }, _this.dblclickDeltaTime);
+                    }
                 }
                 if (nowClickTime - _this.clickTime < _this.dblclickDeltaTime) { //double click
                     clearTimeout(_this.clickTimeout);
@@ -160,7 +161,7 @@ define('SceneRenderer', [
             return this;
         };
 
-        cameraAnimation({position, target, zoom, controls = false}) {
+        cameraAnimation({ position, target, zoom, controls = false }) {
             if (this.camera.animation.moved === false) {
                 //position
                 let _this = this;
@@ -244,6 +245,7 @@ define('SceneRenderer', [
 
         addModel(model) {
             this.model = model;
+            console.log(this.model)
             this.scene.add(this.model.mesh);
             this.addChild(this.model.mesh.children);
             this.camera.lookAt(this.model.focuseTarget);

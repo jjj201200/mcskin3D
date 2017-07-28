@@ -21,7 +21,7 @@ define('SkinCraft', [
     function SkinCraft(options) {
         let _this = this;
         this.options = {
-            modelName: 'Steve',
+            modelName: 'Chicken',
             model: undefined,
             skinImg: undefined,
             domElement: undefined,
@@ -47,10 +47,9 @@ define('SkinCraft', [
             let _this = this;
             this.skinImg = new Image;
             this.skinImg.src = url;
-            this.skinImg.onload = function () {
-
+            // this.skinImg.onload = function () {
                 // _this.model.addSkin(this);
-            };
+            // };
             this.skinImg.onerror = function () {};
             return this;
         };

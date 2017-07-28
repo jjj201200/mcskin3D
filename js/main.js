@@ -22,6 +22,7 @@ require.config({
         'Animation': './animation',
         'Face': './face',
         'model.Steve': './models/steve',
+        'model.Chicken': './models/chicken',
         'Queue': './queue',
         'Part': './part',
         'Common': './common',
@@ -80,7 +81,7 @@ require(['domReady', 'jquery', 'THREE', 'SkinCraft'], function (domReady, $, THR
             canvasWidth:$(document).width(),
             canvasHeight:$(document).height()
         });
-        skinCraft.addSkin('./第一层头发.png');
+        skinCraft.addSkin('./chicken.png');
         // skinCraft.addSkin('./第二层头发.png');
     });
 });

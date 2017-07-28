@@ -1,11 +1,10 @@
-define('model.Steve', ['THREE', 'Model', 'Pose', 'Animation'], function (THREE, Model, Pose, Animation) {
+define('model.Steve', ['THREE', 'Model', 'Pose', 'Animation'], function (THREE, Model) {
     const modelOptions = {
-        dependItems:['Skin','Component'],
         name: 'Steve',
-        type:'steve',
+        defaultType:'steve',
         typeMap: { steve: 0, alex: 1 },
         versionMap: ['new', 'original'],
-        data: {//parts data
+        partsData: {//parts data
             head: {
                 name: 'head',
                 map: [{ //map中的索引对应typeMap中的数值

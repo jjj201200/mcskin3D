@@ -8,13 +8,13 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
             this.context;
             this.parts = {};
             this.mesh = new THREE.Mesh();
-            this.data = {};
+            this.partsData = {};
             this.name = '';
             this.texture;
             this.parent;
             this.typeMap = {}; //object
             this.typeIndex = 0;
-            this.type;
+            this.defaultType;
             this.versionMap = []; //array
             this.version;
             this.versionIndex = 0;
@@ -37,13 +37,14 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
                 console.error('No Model TypeMap Or VersionMap!');
                 return;
             }
-            if (this.type !== undefined) this.typeIndex = this.typeMap[this.type] || 0;
+            if (this.defaultType !== undefined) this.typeIndex = this.typeMap[this.defaultType] || 0;
             else console.warn('No Model Type!');
 
             if (this.versionIndex !== undefined) this.version = this.versionMap[this.versionIndex] || 0;
             else console.warn('No Model Version!');
             this.mesh.name = this.name;
             this.skin.onload = function () {
+                console.log('skin loaded')
                 _this.update().initPoses().initAnimations();
             };
             if (this.callback instanceof Function) this.callback(this);
@@ -99,15 +100,15 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
             let _this = this;
             let length = Object.keys(this.parts).length;
             if (length == 0) {
-                for (let partName in this.data) {
+                for (let partName in this.partsData) {
                     let part = new Part({
                         name: partName,
                         skin: _this.skin,
-                        data: _this.data[partName],
+                        data: _this.partsData[partName],
                         typeIndex: _this.typeIndex,
                         version: _this.version,
-                        position: _this.data[partName].position,
-                        center: _this.data[partName].center,
+                        position: _this.partsData[partName].position,
+                        center: _this.partsData[partName].center,
                         model: _this
                     });
                     this.mesh.add(part.mesh);
@@ -115,7 +116,7 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
                 }
                 this.mesh.position.set(0, 0, 0);
             } else {
-                for (let partName in this.data) {
+                for (let partName in this.partsData) {
                     this.parts[partName].setSkinLayers(this.skinLayers);
                     original ? this.parts[partName].reloadOriginalSkin() : this.parts[partName].drawSkin();
                 }
@@ -137,7 +138,7 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
 
         focusePart(partName) {
             // if (this.animating == false)
-            for (let partIndex in this.data) {
+            for (let partIndex in this.partsData) {
                 if (partIndex == partName){
                     this.parts[partIndex].focuse();
                 }else this.parts[partIndex].unFocuse();
@@ -146,7 +147,7 @@ define('Model', ['THREE', 'Part', 'Pose', 'Animation'], function (THREE, Part, P
 
         resetFocuse() {
             // if (this.animating == false)
-            for (let partIndex in this.data) this.parts[partIndex].resetFocuse();
+            for (let partIndex in this.partsData) this.parts[partIndex].resetFocuse();
         }
     }
 });
