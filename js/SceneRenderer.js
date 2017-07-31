@@ -94,6 +94,7 @@ define('SceneRenderer', [
             this.clickTime = new Date().getTime();
             this.clickTimeout = undefined;
             this.dblclickDeltaTime = 300; //ms
+            let target;
             this.domElement.on('mousemove', function (e) {
                 e.preventDefault();
                 _editor.mouse.x = (e.clientX / _this.domElement.innerWidth()) * 2 - 1;
@@ -102,17 +103,19 @@ define('SceneRenderer', [
             }).on('mousedown', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                let nowClickTime = new Date().getTime();
-                if (_this.clickTimeout === undefined) {
-                    //focuse to part
-                    _this.clickTimeout = setTimeout(function () { //click
-                        if (e.button === 0) {
+                if (e.button === 0) {
+                    _editor.raycaster.setFromCamera(_editor.mouse, _this.camera);
+                    let intersects = _editor.raycaster.intersectObjects(_this.editor.objects);
+                    let nowClickTime = new Date().getTime();
+                    if (intersects.length > 0) {
+                        target = intersects[0].object.cube.findPart();
+                    }
+                    if (_this.clickTimeout === undefined) {
+                        //focuse to part
+                        _this.clickTimeout = setTimeout(function () { //click
                             clearTimeout(_this.clickTimeout);
-                            _editor.raycaster.setFromCamera(_editor.mouse, _this.camera);
-                            let intersects = _editor.raycaster.intersectObjects(_this.editor.objects);
                             if (intersects.length > 0) {
-                            _this.clickTimeout = undefined;
-                                let target = intersects[0].object.cube.findPart();
+                                _this.clickTimeout = undefined;
                                 // _this.renderer.sortObjects = false;
                                 _this.model.focusePart(target.name);
                                 _this.cameraAnimation({
@@ -121,29 +124,27 @@ define('SceneRenderer', [
                                     controls: true
                                 });
                             }
+
+                        }, _this.dblclickDeltaTime);
+                    }
+                    if (nowClickTime - _this.clickTime < _this.dblclickDeltaTime) { //double click
+                        clearTimeout(_this.clickTimeout);
+                        _this.clickTimeout = undefined;
+                        if (e.button === 0) {
+                            // console.log('dblclick');
+
+                            //reset focuse
+                            _this.model.resetFocuse();
+                            // _this.renderer.sortObjects = false;
+                            _this.cameraAnimation({
+                                target: new THREE.Vector3(0, 0, 0),
+                                zoom: 1,
+                                controls: true
+                            })
                         }
 
-                    }, _this.dblclickDeltaTime);
+                    } else _this.clickTime = new Date().getTime();
                 }
-                if (nowClickTime - _this.clickTime < _this.dblclickDeltaTime) { //double click
-                    clearTimeout(_this.clickTimeout);
-                    _this.clickTimeout = undefined;
-                    if (e.button === 0) {
-                        // console.log('dblclick');
-
-                        //reset focuse
-                        _this.model.resetFocuse();
-                        // _this.renderer.sortObjects = false;
-                        _this.cameraAnimation({
-                            target: new THREE.Vector3(0, 0, 0),
-                            zoom: 1,
-                            controls: true
-                        })
-                    }
-
-                } else _this.clickTime = new Date().getTime();
-
-
             });
             return this;
         };
@@ -157,7 +158,7 @@ define('SceneRenderer', [
             return this;
         };
 
-        cameraAnimation({position, target, zoom, controls = false}) {
+        cameraAnimation({ position, target, zoom, controls = false }) {
             if (this.camera.animation.moved === false) {
                 //position
                 let _this = this;
@@ -242,7 +243,7 @@ define('SceneRenderer', [
         addModel(model) {
             this.model = model;
             this.scene.add(this.model.mesh);
-            console.log(this.model.mesh.children,this.model.mesh.children.length)
+            console.log(this.model.mesh.children, this.model.mesh.children.length)
             this.camera.lookAt(this.model.focuseTarget);
             this.addChild(this.model.mesh.children);
         };
