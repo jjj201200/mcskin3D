@@ -2,7 +2,7 @@
  * @Author: jjj201200@gmail.com 
  * @Date: 2017-07-31 14:26:19 
  * @Last Modified by: jjj201200@gmail.com
- * @Last Modified time: 2017-07-31 14:52:34
+ * @Last Modified time: 2017-07-31 17:28:41
  */
 
 require.config({
@@ -17,13 +17,13 @@ require.config({
         '@lib/dat': './libs/dat.gui',
         '@lib/stats': './libs/stats',
         '@lib/i18n': './libs/i18n',
-        '@lib/THREE.OrbitControls': './libs/OrbitControls',
-        '@lib/THREE.SimplifyModifier': './libs/SimplifyModifier',
-        '@lib/THREE.SubdivisionModifier': './libs/SubdivisionModifier',
+        '@lib/OrbitControls': './libs/OrbitControls',
+        '@lib/SimplifyModifier': './libs/SimplifyModifier',
+        '@lib/SubdivisionModifier': './libs/SubdivisionModifier',
 
         '@core/Common': './core/common',
         '@core/SkinCraft': './core/skinCraft',
-        '@core/Renderer': './renderer',
+        '@core/Renderer': './core/renderer',
         '@core/Material': './core/model/material',
         '@core/Model': './core/model/model',
         '@core/ModelManager': './core/model/modelManager',
@@ -37,60 +37,65 @@ require.config({
         '@core/Face': './core/model/face',
         '@core/Cube': './core/model/units/cube',
 
-        '@model/Steve': './models/steve',
+        '@model/': './models/steve',
         '@model/Chicken': './models/chicken',
         // 'GuiController': './GuiController',
     },
     shim: {
+        '@lib/jQuery':{
+            exports:'$'
+        },
         '@lib/THREE': {
-            deps: [],
             exports: 'THREE'
         },
         '@lib/ThreeBSP': {
-            deps: ['THREE'],
+            deps: ['@lib/THREE'],
             exports: 'ThreeBSP'
         },
         '@lib/CSG': {
-            deps: [],
             exports: 'CSG'
         },
         '@lib/TWEEN': {
-            deps: ['THREE'],
+            deps: ['@lib/THREE'],
             exports: 'TWEEN'
         },
-        '@lib/THREE.OrbitControls': {
-            deps: ['THREE'],
-            exports: 'THREE.OrbitControls'
+        '@lib/OrbitControls': {
+            deps: ['@lib/THREE'],
+            exports: 'OrbitControls'
         },
-        '@lib/THREE.SimplifyModifier': {
-            deps: ['THREE'],
-            exports: 'THREE.SimplifyModifier'
+        '@lib/SimplifyModifier': {
+            deps: ['@lib/THREE'],
+            exports: 'SimplifyModifier'
         },
-        '@lib/THREE.SubdivisionModifier': {
-            deps: ['THREE'],
-            exports: 'THREE.SubdivisionModifier'
+        '@lib/SubdivisionModifier': {
+            deps: ['@lib/THREE'],
+            exports: 'SubdivisionModifier'
         },
         '@lib/dat': {
             exports: 'dat'
         },
-        '@core/SkinCraft': {
+        '@lib/SkinCraft': {
             deps: [
                 'require',
                 '@lib/THREE',
                 '@lib/jQuery',
                 '@lib/TWEEN',
                 '@lib/stats',
-                '@lib/THREE.OrbitControls',
+                '@lib/OrbitControls',
                 '@lib/dat',
                 '@lib/ThreeBSP',
-                '@core/modelManager'
+                '@core/ModelManager'
             ]
         },
         '@core/Pose': {
-            deps: ['@lib/THREE', '@lib/TWEEN', '@lib/jQuery']
+            deps: [
+                '@lib/THREE',
+                '@lib/TWEEN',
+                '@lib/jQuery'
+            ]
         },
-        '@core/Animation': {
-            deps: ['@core/Pose']
+        '@model/Animation': {
+            deps: ['@model/Pose']
         },
     }
 });

@@ -2,7 +2,7 @@
  * @Author: jjj201200@gmail.com 
  * @Date: 2017-07-31 14:52:59 
  * @Last Modified by: jjj201200@gmail.com
- * @Last Modified time: 2017-07-31 15:12:31
+ * @Last Modified time: 2017-07-31 17:29:30
  */
 /* 
     the main module of the application
@@ -33,8 +33,8 @@ define('@core/SkinCraft', [
             this.init();
         }
         init(options) {
-            this.renderer = new Renderer({ domElement: this.domElement });
-            this.modelManager = new ModelManager({ renderer: this.renderer });
+            // this.renderer = new Renderer({ domElement: this.domElement });
+            // this.modelManager = new ModelManager({ renderer: this.renderer });
             
             return this;
         }
