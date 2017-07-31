@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
+    "alameda": "^1.2.0",
     "bower": "^1.8.0",
     "mock": "^0.1.1"
   },
